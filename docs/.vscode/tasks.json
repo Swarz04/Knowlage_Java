@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Java: compila il file aperto",
+            "type": "shell",
+            "command": "javac -encoding UTF-8 -d \"${workspaceFolder}/.java-build\" *.java",
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$javac"
+            ],
+            "group": "build"
+        }
+    ]
+}

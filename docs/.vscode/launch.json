@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "UseLuminousDevice",
+            "request": "launch",
+            "mainClass": "UseLuminousDevice",
+            "projectName": "docs_6f93732a"
+        },
+        {
+            "type": "java",
+            "name": "UseMultipleInterfaces",
+            "request": "launch",
+            "mainClass": "UseMultipleInterfaces",
+            "projectName": "docs_6f93732a"
+        },
+        {
+            "type": "java",
+            "name": "UseComposition",
+            "request": "launch",
+            "mainClass": "UseComposition",
+            "projectName": "docs_6f93732a"
+        },
+        {
+            "type": "java",
+            "name": "UsePoint3D",
+            "request": "launch",
+            "mainClass": "UsePoint3D",
+            "projectName": "docs_6f93732a"
+        },
+        {
+            "type": "java",
+            "name": "ExampleOverloading",
+            "request": "launch",
+            "mainClass": "ExampleOverloading",
+            "projectName": "docs_6f93732a"
+        },
+        {
+            "type": "java",
+            "name": "Java: avvia il file aperto",
+            "request": "launch",
+            "mainClass": "${fileBasenameNoExtension}",
+            "classPaths": [
+                "${workspaceFolder}/.java-build"
+            ],
+            "cwd": "${fileDirname}",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Java: compila il file aperto"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+Sorgente: 16-InputOutput.pdf, pagine 16, 22, 30-31.
+Stato: frammento illustrativo, non è un sorgente Java autonomo.
+
+Le slide mostrano firme selezionate delle API standard, omettendo i corpi:
+
+public abstract class InputStream implements Closeable {
+    public abstract int read() throws IOException;
+    public int read(byte[] b) throws IOException { ... }
+    public int read(byte[] b, int off, int len) throws IOException { ... }
+    public long skip(long n) throws IOException { ... }
+    public int available() throws IOException { ... }
+    public void close() throws IOException { ... }
+    public synchronized void mark(int readlimit) { ... }
+    public synchronized void reset() throws IOException { ... }
+    public boolean markSupported() { ... }
+}
+
+public abstract class OutputStream implements Closeable, Flushable {
+    public abstract void write(int b) throws IOException;
+    public void write(byte[] b) throws IOException { ... }
+    public void write(byte[] b, int off, int len) throws IOException { ... }
+    public void flush() throws IOException { ... }
+    public void close() throws IOException { ... }
+}
+
+DataInputStream estende FilterInputStream e implementa DataInput.
+DataOutputStream estende FilterOutputStream e implementa DataOutput.
+
+Queste classi non vengono ricreate nel progetto: appartengono alla libreria
+standard java.io e dichiararle localmente ne falserebbe il comportamento.

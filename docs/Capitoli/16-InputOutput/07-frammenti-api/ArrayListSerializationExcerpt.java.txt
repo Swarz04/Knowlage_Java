@@ -1,0 +1,31 @@
+Sorgente: 16-InputOutput.pdf, pagine 54-55.
+Stato: frammento della libreria Java, intenzionalmente non autonomo.
+
+La slide mostra in forma semplificata che ArrayList:
+
+class ArrayList<E> ... implements ... Serializable {
+    private transient Object[] elementData;
+    private int size;
+
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeInt(elementData.length);
+        for (int i = 0; i < size; i++) {
+            stream.writeObject(elementData[i]);
+        }
+    }
+
+    private void readObject(ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        int arrayLength = stream.readInt();
+        Object[] array = elementData = new Object[arrayLength];
+        for (int i = 0; i < size; i++) {
+            array[i] = stream.readObject();
+        }
+    }
+}
+
+Il frammento spiega perché elementData è transient: ArrayList serializza
+soltanto gli elementi logicamente presenti e ricostruisce l'array interno.
+Non viene compilato né inserito nel package java.util.

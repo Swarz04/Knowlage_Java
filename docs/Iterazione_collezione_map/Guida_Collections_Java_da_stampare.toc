@@ -1,0 +1,29 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {section}{\numberline {1}Come leggere la gerarchia}{2}{section.1}%
+\contentsline {section}{\numberline {2}Iterable e Iterator}{2}{section.2}%
+\contentsline {section}{\numberline {3}Collection: operazioni comuni}{3}{section.3}%
+\contentsline {section}{\numberline {4}List, ArrayList e LinkedList}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}List}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}ArrayList}{4}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}LinkedList, Queue e Deque}{5}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Set, HashSet e TreeSet}{5}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Set}{5}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}HashSet}{6}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}TreeSet}{6}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Map, HashMap e TreeMap}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Map}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}HashMap}{8}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}TreeMap}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Comparable e Comparator}{10}{section.7}%
+\contentsline {section}{\numberline {8}Utility statiche: Collections e Arrays}{10}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Collections}{11}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Arrays}{12}{subsection.8.2}%
+\contentsline {section}{\numberline {9}Stream, lambda e Collectors}{13}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Come funziona una pipeline Stream}{13}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Operazioni terminali usate negli esami}{14}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}flatMap e Collectors}{15}{subsection.9.3}%
+\contentsline {section}{\numberline {10}Altre utility ricorrenti}{15}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Objects.requireNonNull}{15}{subsection.10.1}%
+\contentsline {section}{\numberline {11}Tabella di scelta rapida}{16}{section.11}%
+\contentsline {section}{\numberline {12}Errori tipici d'esame}{16}{section.12}%

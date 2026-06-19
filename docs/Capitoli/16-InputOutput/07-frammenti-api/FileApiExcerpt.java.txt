@@ -1,0 +1,17 @@
+Sorgente: 16-InputOutput.pdf, pagine 9-10.
+Stato: frammento illustrativo, non è un sorgente Java autonomo.
+
+Le slide elencano costruttori e metodi scelti di java.io.File:
+
+- File(String pathname)
+- File(String parent, String child)
+- File(File parent, String child)
+- getName(), getParent(), getPath()
+- isAbsolute(), getAbsolutePath(), getCanonicalPath()
+- canRead(), canWrite(), exists(), isDirectory(), isFile(), isHidden()
+- createNewFile(), delete(), deleteOnExit(), list(), mkdir(), renameTo()
+- setReadOnly(), setWritable(), setReadable(), setExecutable()
+- getTotalSpace(), getFreeSpace(), getUsableSpace()
+
+Il codice reale di java.io.File non viene copiato perché le slide sostituiscono
+i corpi con "...". L'esempio autonomo corrispondente è UseFile.java.

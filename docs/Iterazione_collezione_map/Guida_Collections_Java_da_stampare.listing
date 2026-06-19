@@ -1,0 +1,10 @@
+class Student {
+    private final String name;
+
+    Student(String name) {
+        this.name = Objects.requireNonNull(
+            name, "Il nome non può essere null"
+        );
+        // Errore immediato nel punto in cui nasce l'oggetto
+    }
+}
