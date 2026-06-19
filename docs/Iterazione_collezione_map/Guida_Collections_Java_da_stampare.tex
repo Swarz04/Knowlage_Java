@@ -2,7 +2,7 @@
 \usepackage[a4paper,margin=1.45cm,top=1.55cm,bottom=1.55cm]{geometry}
 \usepackage{fontspec}
 \setmainfont{Segoe UI}
-\setmonofont{Consolas}
+\setmonofont{Cascadia Mono}[AutoFakeBold=1.5,AutoFakeSlant=.2]
 \usepackage[italian]{babel}
 \usepackage{xcolor}
 \usepackage{graphicx}
@@ -23,6 +23,8 @@
 \definecolor{softblue}{HTML}{EAF4FB}
 \definecolor{softgreen}{HTML}{EAF7EF}
 \definecolor{softorange}{HTML}{FFF3E5}
+\definecolor{softred}{HTML}{FDECEC}
+\definecolor{examred}{HTML}{C62828}
 \definecolor{linegray}{HTML}{D9E1E8}
 \definecolor{vsbg}{HTML}{FFFFFF}
 \definecolor{vsfg}{HTML}{1F1F1F}
@@ -41,18 +43,21 @@
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{4pt}
+\setlength{\parskip}{3pt}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\emergencystretch}{2em}
 \setlist[itemize]{leftmargin=5mm,itemsep=1pt,topsep=2pt}
 
 \lstdefinestyle{vscode}{
   language=Java,
-  basicstyle=\ttfamily\small\color{vsfg},
+  basicstyle=\ttfamily\footnotesize\color{vsfg},
   keywordstyle=\bfseries\color{vsblue},
   keywordstyle=[2]\color{vstype},
   stringstyle=\color{vsstring},
   commentstyle=\itshape\color{vscomment},
   numberstyle=\tiny\color{vsnumber},
-  morekeywords=[2]{String,Integer,Double,Person,List,ArrayList,LinkedList,Set,HashSet,TreeSet,Map,HashMap,TreeMap,Queue,Deque,Iterator,Collection,Comparable,Comparator,Collections,Arrays,Map.Entry,Stream,Collectors,Optional,Objects},
+  morekeywords=[2]{String,Integer,Double,Person,Position,Pair,RulesEngine,List,ArrayList,LinkedList,ArrayDeque,Set,HashSet,LinkedHashSet,TreeSet,Map,HashMap,LinkedHashMap,TreeMap,Queue,Deque,Iterator,Collection,Comparable,Comparator,Collections,Arrays,Map.Entry,Stream,Collectors,Optional,Objects,Predicate,Function,BiFunction},
   showstringspaces=false,
   columns=fullflexible,
   keepspaces=true,
@@ -75,8 +80,8 @@
   title={#1},
   arc=2mm,
   boxrule=0.7pt,
-  left=1mm,right=1mm,top=1mm,bottom=1mm,
-  before skip=5pt,after skip=7pt
+  left=.8mm,right=.8mm,top=.8mm,bottom=.8mm,
+  before skip=4pt,after skip=5pt
 }
 
 \newtcolorbox{concept}[2][]{
@@ -89,8 +94,17 @@
   title={#2},fonttitle=\bfseries,coltitle=green!25!black,
   arc=2mm,boxrule=.6pt,#1
 }
+\newtcolorbox{examtrap}[2][]{
+  enhanced,colback=softred,colframe=examred,
+  title={!\quad #2},
+  fonttitle=\bfseries,coltitle=white,
+  arc=2mm,boxrule=.8pt,before upper={\raggedright},#1
+}
 \newcommand{\cmd}[1]{\texttt{#1}}
-\newcommand{\complexity}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\complexity}[1]{\textcolor{accent}{\texttt{\textbf{#1}}}}
+\DeclareRobustCommand{\exammark}{%
+  \texorpdfstring{\textcolor{examred}{\bfseries\Large !}\hspace{.18em}}{! }%
+}
 \newcommand{\topicsection}[1]{\Needspace{12\baselineskip}\section{#1}}
 \newcommand{\topicsubsection}[1]{\Needspace{10\baselineskip}\subsection{#1}}
 \newenvironment{topicblock}{%
@@ -110,17 +124,32 @@
 \vspace{.5cm}
 {\large Scheda di ripasso pronta da stampare\par}
 \vspace{1cm}
-\includegraphics[width=.79\textwidth]{Gemini_Generated_Image_pjh5i4pjh5i4pjh5.png}
+\includegraphics[width=.72\textwidth]{Gemini_Generated_Image_pjh5i4pjh5i4pjh5.png}
 \vfill
 \begin{tcolorbox}[width=.92\textwidth,colback=softorange,colframe=orange!70!black,arc=2mm]
 \textbf{Idea chiave:} dichiara le variabili usando l'interfaccia necessaria, e scegli la classe concreta in base a ordine, duplicati e prestazioni.
 
 \centering\texttt{List<String> nomi = new ArrayList<>();}
 \end{tcolorbox}
+\begin{tcolorbox}[width=.92\textwidth,colback=softblue,colframe=accent,arc=2mm]
+\textbf{Ambiente dell'esame:} OpenJDK 21 LTS. Strumenti consigliati:
+Visual Studio Code con Java Extension Pack, Git e Gradle.
+
+Sono disponibili \cmd{record}, \cmd{Map.entry}, \cmd{Stream.toList()},
+diamond operator, lambda, method reference e \cmd{var}; usa comunque
+\cmd{var} soltanto quando ammesso dallo stile del corso.
+\end{tcolorbox}
+\begin{tcolorbox}[width=.92\textwidth,colback=softred,colframe=examred,arc=2mm]
+\centering
+\exammark\ \textbf{Argomento ad alta frequenza negli appelli:}
+quando compare questo simbolo, fermati e assicurati di saper scrivere il
+codice senza consultare la guida.
+\end{tcolorbox}
 \vfill
 {\small Materiale basato sulle dispense del corso e integrato con gli esercizi degli esami precedenti.}
 \end{titlepage}
 
+\small
 \tableofcontents
 \newpage
 
@@ -156,8 +185,11 @@
 \cmd{for-each}. L'oggetto \cmd{Iterator<E>} mantiene la posizione raggiunta
 durante la visita.
 
-\textbf{Comandi:} \cmd{iterator()}, \cmd{hasNext()}, \cmd{next()},
-\cmd{remove()} (se supportato dall'iteratore) e \cmd{forEach(action)}.
+\textbf{Comandi di Iterator:} \cmd{hasNext()}, \cmd{next()},
+\cmd{remove()} --- se supportato dall'iteratore --- e
+\cmd{forEachRemaining(action)}. Il metodo \cmd{iterator()} appartiene invece
+a \cmd{Iterable}; \cmd{forEach(action)} è disponibile direttamente su
+\cmd{Iterable}.
 \end{concept}
 
 \begin{codebox}{Visita manuale con Iterator}
@@ -180,6 +212,11 @@ names.forEach(name -> System.out.println(name));
 
 // Riferimento a metodo: forma abbreviata equivalente
 names.forEach(System.out::println);
+
+// Sull'Iterator il nome corretto è forEachRemaining:
+Iterator<String> remaining = names.iterator();
+remaining.next(); // salta "Anna"
+remaining.forEachRemaining(System.out::println); // Luca, Sara
 \end{codebox}
 
 \begin{difference}{Da ricordare}
@@ -221,9 +258,8 @@ for (int value : values) {
 \end{codebox}
 
 \end{topicblock}
-\topicsection{List, ArrayList e LinkedList}
+\topicsection{\exammark List, ArrayList e LinkedList}
 
-\begin{topicblock}
 \topicsubsection{List}
 \begin{concept}{Metodi d'istanza distintivi di List}
 Una \cmd{List} ammette duplicati, conserva l'ordine degli elementi e permette
@@ -235,8 +271,8 @@ set(index, value) & sostituisce e restituisce il vecchio elemento \\
 add(index, value) & inserisce spostando a destra gli elementi successivi \\
 remove(index) & rimuove per posizione e restituisce l'elemento rimosso \\
 remove(value) & rimuove la prima occorrenza del valore e restituisce un booleano \\
-indexOf(value) & prima posizione, oppure $-1$ \\
-lastIndexOf(value) & ultima posizione, oppure $-1$ \\
+indexOf(value) & prima posizione, oppure \cmd{-1} \\
+lastIndexOf(value) & ultima posizione, oppure \cmd{-1} \\
 subList(from, to) & vista dall'indice \cmd{from} incluso a \cmd{to} escluso \\
 listIterator() & iteratore bidirezionale specifico delle liste \\
 \end{tabularx}
@@ -262,7 +298,37 @@ Per rimuovere il valore intero \cmd{1} bisogna scrivere
 \cmd{numbers.remove(Integer.valueOf(1))}.
 \end{difference}
 
-\end{topicblock}
+\begin{examtrap}{Vista, copia o lista non modificabile?}
+\cmd{subList(from,to)} restituisce una \textbf{vista}: modifiche strutturali
+alla lista originale possono invalidarla. \cmd{Arrays.asList(...)} ha
+dimensione fissa. \cmd{List.of(...)} e \cmd{List.copyOf(...)} non sono
+modificabili; inoltre rifiutano elementi \cmd{null}.
+
+\cmd{new ArrayList<>(list.subList(from,to))} crea una copia modificabile;
+\cmd{List.copyOf(list.subList(from,to))} crea invece una copia non
+modificabile. Questa distinzione viene spesso nascosta nei test.
+\end{examtrap}
+
+\begin{codebox}{Quattro liste che sembrano uguali, ma non lo sono}
+List<String> fixed = Arrays.asList("A", "B");
+fixed.set(0, "X");       // consentito
+// fixed.add("C");       // UnsupportedOperationException
+
+List<String> immutable = List.of("A", "B");
+// immutable.set(0, "X");// UnsupportedOperationException
+
+List<String> snapshot = List.copyOf(fixed);
+// copia non modificabile dello stato corrente
+
+List<String> mutableCopy = new ArrayList<>(fixed);
+mutableCopy.add("C");    // consentito
+
+List<String> source = new ArrayList<>(List.of("A", "B", "C"));
+List<String> view = source.subList(0, 2); // vista collegata a source
+List<String> editableCopy = new ArrayList<>(view);
+List<String> readOnlyCopy = List.copyOf(view);
+\end{codebox}
+
 \begin{topicblock}
 \topicsubsection{ArrayList}
 \begin{difference}{Quando sceglierla}
@@ -292,11 +358,16 @@ students.trimToSize();           // riduce solo lo spazio interno
 
 \end{topicblock}
 \begin{topicblock}
-\topicsubsection{LinkedList, Queue e Deque}
+\topicsubsection{LinkedList, ArrayDeque, Queue e Deque}
 \begin{difference}{Quando sceglierla}
 Lista doppiamente concatenata: l'accesso per indice è \complexity{O(n)},
 mentre inserimenti e rimozioni alle estremità sono \complexity{O(1)}.
 Implementa sia \cmd{List} sia \cmd{Deque}.
+
+Per una semplice coda o pila, \cmd{ArrayDeque} è normalmente la scelta
+preferita: è più compatta e rapida di \cmd{LinkedList} e non accetta
+\cmd{null}. Usa \cmd{LinkedList} quando serve davvero anche il contratto
+\cmd{List}.
 \end{difference}
 
 \begin{concept}{Metodi d'istanza di Queue e Deque}
@@ -324,8 +395,8 @@ String out2 = queue.poll();  // esce "B"
 System.out.println(queue);   // [C]
 \end{codebox}
 
-\begin{codebox}{Deque usata come pila LIFO}
-Deque<String> deque = new LinkedList<>();
+\begin{codebox}{ArrayDeque usata come pila LIFO}
+Deque<String> deque = new ArrayDeque<>();
 deque.addLast("B");  // [B]
 deque.addLast("C");  // [B, C]
 deque.push("A");     // [A, B, C]: equivale ad addFirst
@@ -335,7 +406,7 @@ String last = deque.removeLast();// "C", resta [B]
 \end{codebox}
 
 \end{topicblock}
-\topicsection{Set, HashSet e TreeSet}
+\topicsection{\exammark Set, HashSet, LinkedHashSet e TreeSet}
 
 \begin{topicblock}
 \topicsubsection{Set}
@@ -343,6 +414,7 @@ String last = deque.removeLast();// "C", resta [B]
 \cmd{Set} non aggiunge molti metodi a \cmd{Collection}, ma ne cambia il
 contratto: non ammette duplicati e non possiede indici.
 \cmd{HashSet} riconosce i duplicati tramite \cmd{equals}/\cmd{hashCode};
+\cmd{LinkedHashSet} aggiunge un ordine di iterazione deterministico;
 \cmd{TreeSet} usa invece \cmd{compareTo} o il \cmd{Comparator}.
 
 \textbf{Metodi usati:}
@@ -360,6 +432,14 @@ Non garantisce alcun ordine di iterazione. \cmd{add}, \cmd{remove} e
 per restringere la ricerca ed \cmd{equals()} per verificare l'uguaglianza.
 \end{difference}
 
+\begin{examtrap}{Chiavi ed elementi mutabili}
+Non modificare i campi usati da \cmd{equals()} o \cmd{hashCode()} mentre
+l'oggetto si trova in un \cmd{HashSet} o viene usato come chiave di
+\cmd{HashMap}. L'oggetto può diventare presente ma irraggiungibile tramite
+\cmd{contains} o \cmd{get}. Preferisci chiavi immutabili, ad esempio un
+\cmd{record Position(int x, int y)}.
+\end{examtrap}
+
 \begin{codebox}{HashSet: unicità e ricerca rapida}
 Set<String> tags = new HashSet<>();
 boolean first = tags.add("java");  // true
@@ -376,10 +456,30 @@ System.out.println(tags);
 
 \end{topicblock}
 \begin{topicblock}
+\topicsubsection{LinkedHashSet}
+\begin{difference}{Unicità con ordine d'inserimento}
+\cmd{LinkedHashSet} mantiene gli elementi unici nell'ordine in cui vengono
+inseriti. Le operazioni principali restano mediamente
+\complexity{O(1)}. Reinserire con \cmd{add} un elemento già presente non ne
+cambia normalmente la posizione.
+\end{difference}
+
+\begin{codebox}{LinkedHashSet: eliminare duplicati senza perdere l'ordine}
+Set<String> names = new LinkedHashSet<>();
+names.add("Anna");
+names.add("Luca");
+names.add("Anna"); // false: duplicato, l'ordine non cambia
+names.add("Sara");
+
+System.out.println(names); // [Anna, Luca, Sara]
+\end{codebox}
+\end{topicblock}
+
+\begin{topicblock}
 \topicsubsection{TreeSet}
 \begin{difference}{Caratteristiche}
 Mantiene gli elementi ordinati secondo l'ordine naturale
-(\cmd{Comparable}) oppure secondo un \cmd{Comparator}. Le operazioni
+\cmd{Comparable} oppure secondo un \cmd{Comparator}. Le operazioni
 principali costano \complexity{O(log n)}. Implementa \cmd{NavigableSet}.
 \end{difference}
 
@@ -410,7 +510,7 @@ System.out.println(numbers.higher(30)); // 40: strettamente >
 \end{codebox}
 
 \end{topicblock}
-\topicsection{Map, HashMap e TreeMap}
+\topicsection{\exammark Map, HashMap, LinkedHashMap e TreeMap}
 
 \begin{topicblock}
 \topicsubsection{Map}
@@ -458,9 +558,16 @@ for (Map.Entry<String, Integer> entry : ages.entrySet()) {
 }
 \end{codebox}
 
+\begin{examtrap}{get non distingue assente da presente con null}
+\cmd{map.get(key) == null} può significare sia ``chiave assente'' sia
+``chiave presente e associata a null''. Quando la distinzione conta usa
+\cmd{containsKey(key)}. Negli esercizi d'esame, se \cmd{null} non ha un
+significato richiesto, evitarlo rende la logica molto più sicura.
+\end{examtrap}
+
 \end{topicblock}
 \begin{topicblock}
-\topicsubsection{HashMap}
+\topicsubsection{\exammark HashMap: conteggi e raggruppamenti}
 \begin{difference}{Caratteristiche}
 Non garantisce l'ordine delle chiavi. \cmd{get}, \cmd{put},
 \cmd{remove} e \cmd{containsKey} costano mediamente \complexity{O(1)}.
@@ -471,16 +578,12 @@ Non aggiunge comandi fondamentali a \cmd{Map}: cambia soprattutto
 l'implementazione e le prestazioni.
 \end{difference}
 
-\begin{codebox}{HashMap e compute: conteggio delle frequenze}
+\begin{codebox}{Conteggio: il template più rapido da ricordare}
 Map<String, Integer> frequency = new HashMap<>();
 List<String> words = Arrays.asList("java", "oop", "java", "java");
 
 for (String word : words) {
-    frequency.compute(word, (key, oldValue) ->
-        oldValue == null ? 1 : oldValue + 1
-    );
-    // Chiave assente: oldValue è null, quindi inserisce 1
-    // Chiave presente: incrementa il vecchio contatore
+    frequency.put(word, frequency.getOrDefault(word, 0) + 1);
 }
 
 System.out.println(frequency.get("java")); // 3
@@ -502,6 +605,29 @@ points.merge("Anna", 1, Integer::sum);
 // Prima chiamata: Anna=3. Seconda chiamata: Anna=4
 \end{codebox}
 
+\end{topicblock}
+\begin{topicblock}
+\topicsubsection{LinkedHashMap: ordine d'inserimento}
+\begin{difference}{Quando serve}
+\cmd{LinkedHashMap} mantiene normalmente l'ordine di inserimento delle
+chiavi, con operazioni medie \complexity{O(1)}. È la scelta giusta quando il
+test confronta anche l'ordine del risultato, per esempio in un motore di
+regole.
+\end{difference}
+
+\begin{codebox}{Regole applicate nello stesso ordine in cui sono aggiunte}
+Map<String, Predicate<Integer>> rules = new LinkedHashMap<>();
+rules.put("positivo", value -> value > 0);
+rules.put("pari", value -> value % 2 == 0);
+
+List<String> matched = new ArrayList<>();
+for (Map.Entry<String, Predicate<Integer>> entry : rules.entrySet()) {
+    if (entry.getValue().test(4)) {
+        matched.add(entry.getKey());
+    }
+}
+// [positivo, pari]: ordine deterministico
+\end{codebox}
 \end{topicblock}
 \begin{topicblock}
 \topicsubsection{TreeMap}
@@ -607,7 +733,7 @@ su cui lavorare come argomento.
 \begin{tabularx}{\textwidth}{>{\ttfamily\small}p{5.5cm} X}
 sort(list) & ordina secondo l'ordine naturale \\
 sort(list, comparator) & ordina usando un criterio esterno \\
-binarySearch(list, key) & restituisce l'indice, oppure un valore negativo se l'elemento manca \\
+binarySearch(list, key) & indice trovato, altrimenti \cmd{-(insertionPoint) - 1} \\
 reverse(list) & inverte l'ordine degli elementi \\
 shuffle(list) & permuta casualmente gli elementi \\
 rotate(list, distance) & ruota gli elementi di alcune posizioni \\
@@ -622,15 +748,22 @@ nCopies(n, value) & restituisce una lista non modificabile con $n$ copie \\
 \end{tabularx}
 \end{concept}
 
+\begin{examtrap}{Regola esatta di binarySearch}
+La lista o l'array devono essere già ordinati con lo stesso criterio usato
+dalla ricerca. Se la chiave manca, il risultato è
+\cmd{-(insertionPoint) - 1}, dove \cmd{insertionPoint} è la posizione in cui
+andrebbe inserita mantenendo l'ordinamento.
+\end{examtrap}
+
 \begin{codebox}{Collections: ordinamento e ricerca}
-List<Integer> list = new ArrayList<>(Arrays.asList(4, 1, 3, 2));
-Collections.sort(list); // [1, 2, 3, 4]
+List<Integer> list = new ArrayList<>(List.of(10, 20, 40));
 
 // La lista deve essere già ordinata con lo stesso criterio
-int position = Collections.binarySearch(list, 3); // indice 2
+int position = Collections.binarySearch(list, 30);
+// insertionPoint = 2, quindi risultato = -2 - 1 = -3
 
-Collections.reverse(list);    // [4, 3, 2, 1]
-Collections.swap(list, 0, 1); // [3, 4, 2, 1]
+Collections.reverse(list);    // [40, 20, 10]
+Collections.swap(list, 0, 1); // [20, 40, 10]
 Collections.shuffle(list);    // nuovo ordine casuale
 \end{codebox}
 
@@ -658,7 +791,7 @@ List<String> copies = Collections.nCopies(3, "Java");
 \begin{tabularx}{\textwidth}{>{\ttfamily\small}p{5.5cm} X}
 sort(array) & ordina tutto l'array \\
 sort(array, from, to) & ordina da \cmd{from} incluso a \cmd{to} escluso \\
-binarySearch(array, key) & cerca in un array già ordinato \\
+binarySearch(array, key) & indice trovato, altrimenti \cmd{-(insertionPoint) - 1} \\
 fill(array, value) & riempie tutte le celle con un valore \\
 fill(array, from, to, value) & riempie da \cmd{from} incluso a \cmd{to} escluso \\
 copyOf(array, length) & crea una copia con nuova lunghezza \\
@@ -674,12 +807,13 @@ asList(elements) & restituisce una lista a dimensione fissa collegata all'array 
 \begin{codebox}{Arrays: ordinamento, ricerca e riempimento}
 int[] values = {4, 1, 3, 2};
 Arrays.sort(values); // modifica lo stesso array
-System.out.println(Arrays.toString(values));
-// [1, 2, 3, 4]
+System.out.println(Arrays.toString(values)); // [1, 2, 3, 4]
 
-int position = Arrays.binarySearch(values, 3); // indice 2
-Arrays.fill(values, 1, 3, 9);
-// [1, 9, 9, 4]: intervallo [from, to)
+int position = Arrays.binarySearch(values, 3); // restituisce 2
+System.out.println(position); // 2
+
+Arrays.fill(values, 1, 3, 9); // riempie gli indici 1 e 2 (estremo destro escluso)
+System.out.println(Arrays.toString(values)); // [1, 9, 9, 4]
 \end{codebox}
 
 \begin{codebox}{Arrays: copie, confronti e conversioni}
@@ -707,9 +841,125 @@ List<int[]> oneElement = Arrays.asList(primitive);
 \end{codebox}
 
 \end{topicblock}
-\topicsection{Stream, lambda e Collectors}
+\topicsection{\exammark Generics e functional interface}
 
-\begin{topicblock}
+\begin{concept}{T, Predicate, Function e BiFunction}
+\cmd{T} è un parametro di tipo: il codice non deve presumere che sia
+\cmd{String}, \cmd{Integer} o un altro tipo concreto.
+
+\begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.2cm} X}
+Predicate<T> & riceve un \cmd{T} e restituisce \cmd{boolean}; metodo \cmd{test} \\
+Function<T,R> & trasforma un \cmd{T} in un \cmd{R}; metodo \cmd{apply} \\
+BiFunction<T,U,R> & riceve due valori e produce un \cmd{R}; metodo \cmd{apply} \\
+\end{tabularx}
+\end{concept}
+
+\begin{codebox}{Selezionare elementi con un Predicate<T>}
+public static <T> List<T> select(
+        List<T> values,
+        Predicate<T> predicate) {
+    List<T> result = new ArrayList<>();
+    for (T value : values) {
+        if (predicate.test(value)) {
+            result.add(value);
+        }
+    }
+    return result;
+}
+
+List<Integer> positives = select(
+    List.of(-2, 3, 0, 5),
+    value -> value > 0
+);
+\end{codebox}
+
+\begin{examtrap}{Non inventare operazioni su T}
+Su un valore di tipo \cmd{T} puoi usare soltanto le operazioni garantite
+dalla firma. Non puoi sommare, ordinare o chiamare metodi specifici senza un
+vincolo o senza ricevere un \cmd{Comparator}, una \cmd{Function} o un'altra
+strategia dall'esterno.
+\end{examtrap}
+
+\begin{concept}{Method reference: cosa significa \texttt{Tipo::metodo}}
+Un method reference è una forma abbreviata di lambda. I parametri non sono
+scritti esplicitamente: vengono ricavati dall'interfaccia funzionale richiesta
+in quel punto.
+
+\begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.4cm} X}
+Integer::compare & equivale a \cmd{(a, b) -> Integer.compare(a, b)} \\
+System.out::println & equivale a \cmd{value -> System.out.println(value)} \\
+Map.Entry::getKey & equivale a \cmd{entry -> entry.getKey()} \\
+ArrayList::new & equivale a \cmd{() -> new ArrayList<>()} \\
+\end{tabularx}
+
+\cmd{Integer::compare} richiama il metodo statico
+\cmd{Integer.compare(int,int)}: riceve due interi e restituisce un numero
+negativo, zero o positivo. Può quindi essere usato dove serve un
+\cmd{Comparator<Integer>}.
+\end{concept}
+
+\begin{codebox}{Lambda e method reference equivalenti}
+Comparator<Integer> first =
+    (a, b) -> Integer.compare(a, b);
+
+Comparator<Integer> second = Integer::compare;
+
+Optional<Integer> minimum = List.of(7, 3, 10)
+    .stream()
+    .min(Integer::compare); // Optional[3]
+\end{codebox}
+
+\begin{codebox}{Combinare due liste generiche: zip}
+record Pair<X, Y>(X first, Y second) { }
+
+public static <X, Y> List<Pair<X, Y>> zip(
+        List<X> xs,
+        List<Y> ys) {
+    List<Pair<X, Y>> result = new ArrayList<>();
+    int size = Math.min(xs.size(), ys.size());
+    for (int i = 0; i < size; i++) {
+        result.add(new Pair<>(xs.get(i), ys.get(i)));
+    }
+    return result;
+}
+\end{codebox}
+
+\begin{examtrap}{Map.entry in OpenJDK 21}
+\cmd{Map.entry(key,value)} crea rapidamente una coppia non modificabile, ma
+rifiuta sia chiavi sia valori \cmd{null}. Per una coppia generica che deve
+accettare \cmd{null}, un piccolo \cmd{record Pair<X,Y>} è più adatto.
+\end{examtrap}
+
+\topicsection{\exammark Optional: risultati che possono mancare}
+
+\begin{concept}{Assenza esplicita, non null nascosto}
+\cmd{Optional<T>} rappresenta un risultato presente oppure assente.
+\cmd{Optional.of(value)} richiede un valore non nullo;
+\cmd{Optional.ofNullable(value)} accetta anche \cmd{null};
+\cmd{Optional.empty()} rappresenta l'assenza.
+\end{concept}
+
+\begin{codebox}{Ricerca del primo elemento: template d'esame}
+public static <T> Optional<T> firstMatching(
+        List<T> values,
+        Predicate<T> condition) {
+    for (T value : values) {
+        if (condition.test(value)) {
+            return Optional.of(value);
+        }
+    }
+    return Optional.empty();
+}
+\end{codebox}
+
+\begin{examtrap}{orElse e orElseGet non sono equivalenti}
+\cmd{optional.orElse(expensive())} valuta \cmd{expensive()} anche quando il
+valore è presente. \cmd{optional.orElseGet(() -> expensive())} esegue invece
+il calcolo soltanto se l'Optional è vuoto. Evita \cmd{get()} senza controllo.
+\end{examtrap}
+
+\topicsection{\exammark Stream, lambda e Collectors}
+
 \topicsubsection{Come funziona una pipeline Stream}
 
 \begin{concept}{Sorgente, operazioni intermedie e operazione terminale}
@@ -728,6 +978,14 @@ a destra c'è l'operazione da eseguire o il valore da restituire.
 Se si dichiara una variabile \cmd{Stream<T>}, serve anche
 \cmd{import java.util.stream.Stream;}.\\
 \cmd{import java.util.*;} non importa il sottopackage \cmd{java.util.stream}.
+
+\begin{examtrap}{\texttt{toList()} oppure \texttt{Collectors.toList()}?}
+\cmd{stream.toList()} è disponibile da Java 16 e restituisce una lista non
+modificabile. \cmd{stream.collect(Collectors.toList())} funziona anche nelle
+versioni precedenti, ma non garantisce il tipo concreto né formalmente la
+modificabilità. Se serve sicuramente una \cmd{ArrayList} modificabile usa
+\cmd{collect(Collectors.toCollection(ArrayList::new))}.
+\end{examtrap}
 
 \begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.2cm} X}
 collection.stream() & crea lo stream dalla collezione \\
@@ -761,10 +1019,8 @@ System.out.println(result); // [ANNA, ALBERTO]
 System.out.println(names);  // la lista originale non cambia
 \end{codebox}
 
-\end{topicblock}
-
 \begin{topicblock}
-\topicsubsection{Operazioni terminali usate negli esami}
+\topicsubsection{\exammark Operazioni terminali usate negli esami}
 
 \begin{concept}{Produrre un risultato}
 \begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.2cm} X}
@@ -815,13 +1071,32 @@ int found = Arrays.asList(3, 7, 10).stream()
 \topicsubsection{flatMap e Collectors}
 
 \begin{concept}{Metodi di Collectors più usati}
-\begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.2cm} X}
+\begin{tabularx}{\textwidth}{>{\ttfamily\small}p{4.4cm} X}
 Collectors.toList() & raccoglie gli elementi in una lista; il tipo concreto non è garantito \\
 Collectors.toSet() & raccoglie in un set; tipo concreto e ordine non sono garantiti \\
 Collectors.toMap(k, v) & crea una mappa; chiavi duplicate causano un'eccezione \\
 Collectors.joining(sep) & concatena stringhe usando un separatore \\
 \end{tabularx}
 \end{concept}
+
+\begin{examtrap}{toMap e chiavi duplicate}
+Se due elementi producono la stessa chiave, la forma a due argomenti di
+\cmd{Collectors.toMap} lancia \cmd{IllegalStateException}. Fornisci una
+funzione di fusione quando i duplicati sono possibili.
+\end{examtrap}
+
+\begin{codebox}{toMap con chiavi duplicate: funzione di fusione}
+Map<String, Integer> totals = Stream.of(
+    Map.entry("Anna", 3),
+    Map.entry("Anna", 1),
+    Map.entry("Luca", 2)
+).collect(Collectors.toMap(
+    Map.Entry::getKey,
+    Map.Entry::getValue,
+    Integer::sum
+));
+// {Anna=4, Luca=2}: ordine non garantito
+\end{codebox}
 
 \begin{codebox}{flatMap: appiattire collezioni annidate}
 List<List<String>> groups = Arrays.asList(
@@ -879,6 +1154,204 @@ class Student {
 \end{codebox}
 
 \end{topicblock}
+\topicsection{\exammark Pattern bastardi degli esercizi OOP}
+
+\begin{examtrap}{Prima i test, poi l'implementazione}
+Quando sono presenti test JUnit, trattali come specifica eseguibile:
+controlla firme, ordine dei risultati, mutabilità e casi limite. Implementa
+prima il comportamento minimo osservato dai test; non costruire un sistema
+più grande di quello richiesto.
+\end{examtrap}
+
+\begin{concept}{Ordine operativo consigliato}
+\begin{enumerate}[leftmargin=7mm,itemsep=2pt,topsep=2pt]
+\item Apri \cmd{Test.java} e annota i metodi realmente verificati.
+\item Leggi le interfacce e rispetta esattamente firme e tipi generici.
+\item Scegli \cmd{List}, \cmd{Set} o \cmd{Map} in base al significato dello stato.
+\item Implementa prima la versione più semplice con cicli e collection.
+\item Verifica ordine, duplicati, assenza del risultato e casi limite.
+\item Per gli esercizi grafici concentra il lavoro nella logica; modifica la GUI soltanto se necessario.
+\end{enumerate}
+\end{concept}
+
+\begin{difference}{Priorità di ripasso}
+\textbf{1.} Collections e Map \quad
+\textbf{2.} lettura dei test \quad
+\textbf{3.} factory e classi Impl \quad
+\textbf{4.} generics e Optional \quad
+\textbf{5.} lambda e Predicate \quad
+\textbf{6.} logica su griglie.
+\end{difference}
+
+\begin{topicblock}
+\topicsubsection{\exammark Factory, interfaccia e implementazione privata}
+\begin{concept}{Forma ricorrente dell'Esercizio 1}
+La factory restituisce il tipo dell'interfaccia, mentre la classe concreta
+può restare privata. Il chiamante conosce il contratto, non i dettagli dello
+stato interno.
+\end{concept}
+
+\begin{codebox}{Factory + Map per un contatore}
+interface Counter {
+    void hit(String key);
+    int count(String key);
+}
+
+interface CounterFactory {
+    Counter empty();
+}
+
+class CounterFactoryImpl implements CounterFactory {
+    @Override
+    public Counter empty() {
+        return new CounterImpl();
+    }
+
+    private static class CounterImpl implements Counter {
+        private final Map<String, Integer> counts = new HashMap<>();
+
+        @Override
+        public void hit(String key) {
+            counts.put(key, counts.getOrDefault(key, 0) + 1);
+        }
+
+        @Override
+        public int count(String key) {
+            return counts.getOrDefault(key, 0);
+        }
+    }
+}
+\end{codebox}
+\end{topicblock}
+
+\begin{topicblock}
+\topicsubsection{Immutabilità e copie difensive}
+\begin{concept}{Restituire un nuovo oggetto}
+Se i test conservano una vecchia versione e verificano che non cambi, ogni
+operazione deve creare una nuova collezione. \cmd{List.copyOf} è utile per
+salvare o restituire uno snapshot non modificabile.
+\end{concept}
+
+\begin{codebox}{Builder persistente: add non modifica this}
+final class ListBuilder<T> {
+    private final List<T> elements;
+
+    ListBuilder() {
+        this.elements = List.of();
+    }
+
+    private ListBuilder(List<T> elements) {
+        this.elements = List.copyOf(elements);
+    }
+
+    ListBuilder<T> add(T element) {
+        List<T> copy = new ArrayList<>(this.elements);
+        copy.add(element);
+        return new ListBuilder<>(copy);
+    }
+
+    List<T> build() {
+        return this.elements;
+    }
+}
+\end{codebox}
+\end{topicblock}
+
+\begin{topicblock}
+\topicsubsection{\exammark Sequenze: indici e limiti}
+\begin{examtrap}{Il caso limite rompe il codice elegante}
+Per finestre di lunghezza \cmd{size}, l'ultimo indice iniziale valido
+soddisfa \cmd{i + size <= list.size()}. Decidi esplicitamente cosa fare con
+\cmd{size <= 0}; in genere si lancia \cmd{IllegalArgumentException}.
+Con due liste di lunghezza diversa, \cmd{zip} usa normalmente la lunghezza
+minore, salvo diversa indicazione dei test.
+\end{examtrap}
+
+\begin{codebox}{Finestre sovrapposte con copia della subList}
+public static <T> List<List<T>> windows(
+        List<T> list,
+        int size) {
+    if (size <= 0) {
+        throw new IllegalArgumentException("size must be positive");
+    }
+
+    List<List<T>> result = new ArrayList<>();
+    for (int i = 0; i + size <= list.size(); i++) {
+        result.add(List.copyOf(list.subList(i, i + size)));
+    }
+    return result;
+}
+// windows([1,2,3,4], 2) -> [[1,2], [2,3], [3,4]]
+\end{codebox}
+
+\begin{codebox}{Sostituzione senza modificare la lista originale}
+public static <T> List<T> replace(
+        List<T> list,
+        Predicate<T> toReplace,
+        T replacement) {
+    List<T> result = new ArrayList<>();
+    for (T element : list) {
+        result.add(toReplace.test(element) ? replacement : element);
+    }
+    return result;
+}
+\end{codebox}
+
+\begin{codebox}{Estrarre una porzione come copia indipendente}
+public static <T> List<T> extract(
+        List<T> list,
+        int from,
+        int to) {
+    if (from < 0 || from > to || to > list.size()) {
+        throw new IndexOutOfBoundsException();
+    }
+    return new ArrayList<>(list.subList(from, to));
+}
+// from incluso, to escluso; il risultato non è una vista
+\end{codebox}
+\end{topicblock}
+
+\begin{topicblock}
+\topicsubsection{\exammark Griglie: Position come chiave di Set e Map}
+\begin{concept}{Forma ricorrente dell'Esercizio 2}
+Usa \cmd{Set<Position>} per celle occupate o cliccate e
+\cmd{Map<Position,V>} quando ogni cella possiede un valore. Un \cmd{record}
+è una buona chiave perché genera \cmd{equals} e \cmd{hashCode} coerenti ed è
+immutabile.
+\end{concept}
+
+\begin{codebox}{Validazione e aggiornamento atomico del click}
+record Position(int x, int y) { }
+
+private final Set<Position> marked = new HashSet<>();
+private final int size = 5;
+private final int target = 4;
+private boolean over;
+
+boolean hit(Position position) {
+    if (position == null || over
+            || !inGrid(position)
+            || marked.contains(position)) {
+        return false;
+    }
+    marked.add(position);
+    over = marked.size() >= target;
+    return true;
+}
+
+boolean inGrid(Position position) {
+    return position.x() >= 0 && position.x() < size
+        && position.y() >= 0 && position.y() < size;
+}
+\end{codebox}
+
+\begin{examtrap}{Ordine del metodo hit}
+Prima valida coordinate, duplicati e stato di fine; soltanto dopo modifica
+la collezione. Infine aggiorna la condizione di vittoria. Cambiare
+quest'ordine produce spesso click contati due volte o stato corrotto.
+\end{examtrap}
+\end{topicblock}
+
 \begin{topicblock}
 \topicsection{Tabella di scelta rapida}
 
@@ -888,10 +1361,13 @@ class Student {
 Tipo & Duplicati & Ordinamento & Quando usarlo \\
 \midrule
 ArrayList & sì & inserimento & lista standard e accesso frequente tramite indice \\
-LinkedList & sì & inserimento & coda/deque e operazioni frequenti alle estremità \\
+ArrayDeque & sì & estremità & coda/deque/pila; scelta standard per operazioni alle estremità \\
+LinkedList & sì & inserimento & quando servono contemporaneamente i contratti List e Deque \\
 HashSet & no & nessuno & elementi unici e ricerca rapida \\
+LinkedHashSet & no & inserimento & elementi unici mantenendo l'ordine di inserimento \\
 TreeSet & no & naturale/Comparator & elementi unici, ordinati e navigabili \\
 HashMap & chiavi uniche & nessuno & associazioni chiave--valore rapide \\
+LinkedHashMap & chiavi uniche & inserimento & mappa rapida con ordine deterministico \\
 TreeMap & chiavi uniche & per chiave & associazioni con chiavi ordinate e navigabili \\
 \bottomrule
 \end{tabularx}
@@ -899,28 +1375,51 @@ TreeMap & chiavi uniche & per chiave & associazioni con chiavi ordinate e naviga
 \vspace{6pt}
 \begin{tcolorbox}[colback=softorange,colframe=orange!70!black,title={Regola pratica},fonttitle=\bfseries]
 Come scelta iniziale usa \cmd{ArrayList}, \cmd{HashSet} e \cmd{HashMap}.
-Scegli le varianti \cmd{Tree*} quando serve mantenere l'ordine, e
-\cmd{Deque} quando il lavoro avviene soprattutto alle estremità.
+\cmd{TreeSet} e \cmd{TreeMap} ordinano secondo l'ordine naturale o un
+\cmd{Comparator}. Per conservare l'ordine di inserimento usa
+\cmd{LinkedHashSet} o \cmd{LinkedHashMap}. Scegli \cmd{ArrayDeque} quando il
+lavoro avviene soprattutto alle estremità.
 \end{tcolorbox}
 
 \end{topicblock}
 \begin{topicblock}
-\topicsection{Errori tipici d'esame}
+\topicsection{\exammark Errori tipici d'esame}
 
 \begin{itemize}
+\item Copiare dal PDF codice contenente trattini Unicode al posto di \cmd{->} o \cmd{-}.
 \item Chiamare \cmd{size()} su \cmd{Iterable}: il metodo appartiene a \cmd{Collection}.
 \item Cercare \cmd{get(i)} su un \cmd{Set}: i set non hanno indici.
 \item Scrivere \cmd{list.remove(1)} pensando di rimuovere il valore \cmd{1}: su una lista di interi viene rimosso l'elemento di indice \cmd{1}.
 \item Credere che \cmd{HashSet} o \cmd{HashMap} mantengano l'ordine di inserimento.
+\item Confondere \cmd{TreeSet}/\cmd{TreeMap} con l'ordine di inserimento: \cmd{Tree*} ordina, \cmd{LinkedHash*} conserva l'inserimento.
+\item Dimenticare \cmd{LinkedHashSet} quando servono elementi unici in ordine di inserimento.
 \item Modificare campi usati da \cmd{equals}/\cmd{hashCode} mentre l'oggetto è un elemento di \cmd{HashSet} o una chiave di \cmd{HashMap}.
 \item Usare un tipo non confrontabile dentro \cmd{TreeSet} senza fornire un \cmd{Comparator}.
 \item Dimenticare che \cmd{Arrays.asList()} produce una lista a dimensione fissa e che un array primitivo diventa un solo elemento.
+\item Confondere una vista come \cmd{subList} con una copia indipendente.
+\item Usare \cmd{Stream.toList()} e poi provare a modificare la lista.
+\item Usare \cmd{List.copyOf(...)} pensando di ottenere una \cmd{ArrayList} modificabile.
+\item Dimenticare che \cmd{List.of(...)} e \cmd{List.copyOf(...)} non accettano \cmd{null}.
+\item Usare \cmd{Map.entry(...)} con una chiave o un valore \cmd{null}.
 \item Confondere \cmd{Map} con \cmd{Collection}: le viste sono \cmd{keySet()}, \cmd{values()} ed \cmd{entrySet()}.
+\item Usare soltanto \cmd{get(key) == null} quando la mappa può contenere valori \cmd{null}.
+\item Usare \cmd{binarySearch} su dati non ordinati con lo stesso criterio della ricerca.
 \item Riutilizzare uno \cmd{Stream} dopo un'operazione terminale: lo stream è già stato consumato.
 \item Confondere \cmd{map} con \cmd{flatMap}: il primo trasforma, il secondo trasforma e appiattisce.
+\item Usare \cmd{Collectors.toMap} senza funzione di fusione quando possono comparire chiavi duplicate.
 \item Chiamare \cmd{Optional.get()} senza verificarne il contenuto: preferire \cmd{orElse}, \cmd{orElseGet} o \cmd{ifPresent}.
+\item Usare \cmd{orElse(expensive())} pensando che il valore alternativo venga calcolato soltanto quando serve.
+\item Scrivere una finestra con limiti errati oppure non gestire \cmd{size <= 0}.
+\item Aggiornare lo stato di una griglia prima di avere validato il click.
 \item Credere che \cmd{import java.util.*} importi anche \cmd{Collectors}: serve \cmd{java.util.stream.Collectors}.
 \end{itemize}
+
+\begin{examtrap}{Quattro template da sapere a memoria}
+\cmd{map.put(key, map.getOrDefault(key, 0) + 1)} per contare;\quad
+\cmd{map.computeIfAbsent(key, k -> new ArrayList<>()).add(value)} per
+raggruppare;\quad \cmd{return Optional.empty()} quando una ricerca fallisce;\quad
+\cmd{new ArrayList<>(source)} per ottenere una copia modificabile.
+\end{examtrap}
 
 \end{topicblock}
 \end{document}

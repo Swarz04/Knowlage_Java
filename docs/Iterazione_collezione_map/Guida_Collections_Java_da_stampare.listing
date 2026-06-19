@@ -1,10 +1,22 @@
-class Student {
-    private final String name;
+record Position(int x, int y) { }
 
-    Student(String name) {
-        this.name = Objects.requireNonNull(
-            name, "Il nome non può essere null"
-        );
-        // Errore immediato nel punto in cui nasce l'oggetto
+private final Set<Position> marked = new HashSet<>();
+private final int size = 5;
+private final int target = 4;
+private boolean over;
+
+boolean hit(Position position) {
+    if (position == null || over
+            || !inGrid(position)
+            || marked.contains(position)) {
+        return false;
     }
+    marked.add(position);
+    over = marked.size() >= target;
+    return true;
+}
+
+boolean inGrid(Position position) {
+    return position.x() >= 0 && position.x() < size
+        && position.y() >= 0 && position.y() < size;
 }
