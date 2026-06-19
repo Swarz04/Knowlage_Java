@@ -1,0 +1,21 @@
+# Java: bytecode e cartelle generate dalla compilazione
+*.class
+**/bin/
+**/build/
+**/out/
+**/target/
+
+# Strumenti di build
+.gradle/
+
+# File temporanei e log
+*.log
+*.tmp
+*.temp
+*.bak
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
