@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 /*
  * Si fornisce l'interfaccia per un conto corrente e due sue diverse implementazioni a titolo di esempio.
  * che differiscono per le condizioni (ossia solo per i costi/interessi che applicano).
- * All'insorgere di una terza tipologia di condizioni, si rende necessaria una rifattorizzano che consenta di 
+ * All'insorgere di una terza tipologia di condizioni, si rende necessaria una rifattorizzano che consenta di
  * gestire il conto corrente con una unica classe, e comunque evitando il più possibile le duplicazioni di codice.
- * Quindi, si sostituiscano ContoCorrenteA e ContoCorrenteB con una unica implementazione riusabile ContoCorrenteImpl 
- * dell'interfaccia ContoCorrente. Tale implementazione sia utilizzabile per svolgere le stesse funzioni di 
+ * Quindi, si sostituiscano ContoCorrenteA e ContoCorrenteB con una unica implementazione riusabile ContoCorrenteImpl
+ * dell'interfaccia ContoCorrente. Tale implementazione sia utilizzabile per svolgere le stesse funzioni di
  * ContoCorrenteA e ContoCorrenteB (si vedano testA e testB), ma anche per realizzare il nuovo funzionamento
  * richiesto da testC -- si veda sotto.
- * Per indicare quali condizioni vanno applicate al conto, si consiglia di usare il pattern Strategy, passando al 
- * costruttore di ContoCorrenteImpl un oggetto (magari creato attraverso una classe anonima), che specifichi i costi/interessi 
+ * Per indicare quali condizioni vanno applicate al conto, si consiglia di usare il pattern Strategy, passando al
+ * costruttore di ContoCorrenteImpl un oggetto (magari creato attraverso una classe anonima), che specifichi i costi/interessi
  * da applicare in modo sufficientemente flessibile da supportare tutti i test qui sotto.
  */
 
@@ -27,14 +27,13 @@ public class Test {
 		 * funzionamento della classe ContoCorrenteA.
 		 */
 		final ContoCorrente cc = new ContoCorrenteImpl(new CCStrategy() {
-
 			@Override
-			public double costoPerPrelievo(final double importo) {
+			public double getCostoOperazione(final double importo) {
 				return 1;
 			}
 
 			@Override
-			public double interessiAnnuali(final double saldoCC) {
+			public double getInteressiAnnuali(final double saldoCC) {
 				return 0;
 			}
 
@@ -60,12 +59,12 @@ public class Test {
 		final ContoCorrente cc = new ContoCorrenteImpl(new CCStrategy() {
 
 			@Override
-			public double costoPerPrelievo(final double importo) {
+			public double getCostoOperazione(final double importo) {
 				return importo * 0.01;
 			}
 
 			@Override
-			public double interessiAnnuali(final double saldoCC) {
+			public double getInteressiAnnuali(final double saldoCC) {
 				return saldoCC * 0.05;
 			}
 
@@ -90,7 +89,7 @@ public class Test {
 		final ContoCorrente cc = new ContoCorrenteImpl(new CCStrategy(){
 
 			@Override
-			public double costoPerPrelievo(final double importo) {
+			public double getCostoOperazione(final double importo) {
 				if(importo <= 10){
 					return 1;
 				}else{
@@ -99,10 +98,10 @@ public class Test {
 			}
 
 			@Override
-			public double interessiAnnuali(final double saldoCC) {
+			public double getInteressiAnnuali(final double saldoCC) {
 				return 0;
 			}
-			
+
 		});
 		cc.versamento(100);
 		cc.prelievo(9);
